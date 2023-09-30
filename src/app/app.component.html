@@ -1,0 +1,67 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form-group">
+    <label for="name">Your name:</label>
+    <input
+      formControlName="fullname"
+      class="form-control"
+      [ngClass]="{ 'is-invalid': submitted && f.fullname.errors }"
+      type="text"
+      name="fullname"
+      id="fullname"
+    />
+    <div *ngIf="f.fullname.errors?.required">Please enter a name</div>
+    <div *ngIf="submitted && f.fullname.errors">
+      Please enter both your first and last name
+    </div>
+  </div>
+  <div class="form-group">
+    <!-- Email field -->
+    <label for="email">Your email address:</label>
+    <input
+      formControlName="email"
+      class="form-control"
+      [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+      type="text"
+      name="email"
+      id="email"
+    />
+    <div *ngIf="f.email.errors?.required">Please enter an email address</div>
+    <div *ngIf="submitted && f.email.errors">
+      Please ensure your email address is correct
+    </div>
+  </div>
+  <div class="form-group">
+    <!-- Repeat email field -->
+    <label for="email2">Enter your email address again:</label>
+    <input
+      formControlName="email2"
+      class="form-control"
+      [ngClass]="{ 'is-invalid': submitted && f.email2.errors }"
+      type="text"
+      name="email2"
+      id="email2"
+    />
+    <div *ngIf="false">
+      Please ensure your email addresses match
+    </div>
+  </div>
+  <div class="form-group">
+    <!-- Password field -->
+    <label for="password">Your new password:</label>
+    <input
+      formControlName="password"
+      class="form-control"
+      [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+      type="password"
+      name="password"
+      id="password"
+    />
+    <div *ngIf="f.password.errors?.required">Please enter a password</div>
+    <div *ngIf="false">Passwords must be at least 8 characters</div>
+  </div>
+
+  <!-- Special message from the NameInfoService -->
+  <div class="message">{{ nameMessage }}</div>
+
+  <input type="submit" value="Submit form" [disabled]="form.invalid" />
+</form>
