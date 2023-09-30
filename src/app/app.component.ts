@@ -53,8 +53,7 @@ export class AppComponent {
           '',
           [
             Validators.required,
-            Validators.minLength(6),
-            Validators.maxLength(40),
+            Validators.minLength(8)
           ],
         ],
       },
