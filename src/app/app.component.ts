@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 
 // Custom validator function
@@ -34,12 +35,11 @@ export class AppComponent {
     private nameInfoService: NameInfoService,
     private formBuilder: FormBuilder
   ) {
-    nameInfoService.getNameInfo('').subscribe((a) => {
-      this.nameMessage = a;
-    });
+    
   }
 
   ngOnInit(): void {
+    //Construct a `FormGroup` for the four fields
     this.form = this.formBuilder.group(
       {
         fullname: ['', [
@@ -61,6 +61,19 @@ export class AppComponent {
         validator: emailMatchValidator
       }
     );
+
+
+
+    //debounce the user's input on the `name` control (500ms) and then call the `getNameInfo` method, passing the value from the name control. The returned message should be assigned to `nameMessage`
+    this.form.get('fullname').valueChanges
+      .pipe(
+        debounceTime(500), // Debounce user input for 500ms
+        distinctUntilChanged(), // Ensure the input has changed
+        switchMap((name: string) => this.nameInfoService.getNameInfo(name)) // service method call
+      )
+      .subscribe((message: string) => {
+        this.nameMessage = message; // Assign the returned message to nameMessage
+      });
   }
 
   get f(): { [key: string]: AbstractControl } {
@@ -77,6 +90,9 @@ export class AppComponent {
 
     console.log(JSON.stringify(this.form.value, null, 2));
   }
+
+
+  
 
 
   
